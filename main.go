@@ -50,16 +50,25 @@ func myTwitchHandler(w http.ResponseWriter, r *http.Request) {
 	// YOUR ROUTES LOGIC GOES HERE
 	//
 	// Feel free to structure your routing however you see fit, this is just an example to get you started.
-	request, err := http.NewRequest("GET", "http://pokeapi.co/api/v2/pokedex/kanto/")
+
+	client := &http.Client{}
+
+	// resp, err := client.Get("https://api.twitch.tv/kraken/users?login=dallas,dallasnchains")
+	
+	request, err := http.NewRequest("GET", "https://api.twitch.tv/kraken/users?login=dallas,dallasnchains", nil)
 	if err != nil {
 		fmt.Println(err.Error())
 	 	os.Exit(1)
-	} else{
-        responseData, err := ioutil.ReadAll(response.Body)
-      	if err != nil {
-			log.Fatal(err)
-		}
-        fmt.Println(string(responseData))
-    }
+	} 
+	request.Header.Set("Client-ID", "ow8er2yjqzvbwzvfx832rrb5ucy933")
+	request.Header.Set("Accept", "application/vnd.twitchtv.v5+json")
+
+	resp, err := client.Do(request)
+        
+    responseData, err := ioutil.ReadAll(resp.Body)
+    if err != nil {
+		log.Fatal(err)
+	}
+    fmt.Println(string(responseData))
 
 }
