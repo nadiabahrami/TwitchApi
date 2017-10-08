@@ -6,11 +6,12 @@ import (
 	"net/http"
 	"io/ioutil"
 	"os"
+	"encoding/json"
 	"log"
 )
 
 func main() {
-	clientID := os.Getenv("CLIENT_ID")
+	// clientID := os.Getenv("CLIENT_ID")
 	fmt.Println("Booting the server...")
 
 	// Configure a sample route
@@ -25,7 +26,7 @@ func main() {
 
 func myTwitchHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Recieved the following request:", r.Body)
-
+	clientID := os.Getenv("CLIENT_ID")
 	twitch.DoSomething()
 
 	// YOUR ROUTES LOGIC GOES HERE
@@ -41,7 +42,7 @@ func myTwitchHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err.Error())
 	 	os.Exit(1)
 	} 
-	request.Header.Set("Client-ID", "clientID")
+	request.Header.Set("Client-ID", clientID)
 	request.Header.Set("Accept", "application/vnd.twitchtv.v5+json")
 
 	resp, err := client.Do(request)
@@ -51,12 +52,18 @@ func myTwitchHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
     fmt.Fprintf(w, string(responseData))
+    
+    var responseObject GetUsersAPIResponse
+	json.Unmarshal(responseData, &responseObject)
+
+    fmt.Println(responseObject.TotalUsers)
+  	fmt.Println(responseObject.UserList[0].Id)
 
 }
 
 func myChannelHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Recieved the following request:", r.Body)
-
+	clientID := os.Getenv("CLIENT_ID")
 	// YOUR ROUTES LOGIC GOES HERE
 	//
 	// Feel free to structure your routing however you see fit, this is just an example to get you started.
@@ -70,7 +77,7 @@ func myChannelHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err.Error())
 	 	os.Exit(1)
 	} 
-	request.Header.Set("Client-ID", "clientID")
+	request.Header.Set("Client-ID", clientID)
 	request.Header.Set("Accept", "application/vnd.twitchtv.v5+json")
 
 	resp, err := client.Do(request)
@@ -84,7 +91,7 @@ func myChannelHandler(w http.ResponseWriter, r *http.Request) {
 
 func myStreamHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Recieved the following request:", r.Body)
-
+	clientID := os.Getenv("CLIENT_ID")
 	// YOUR ROUTES LOGIC GOES HERE
 	//
 	// Feel free to structure your routing however you see fit, this is just an example to get you started.
@@ -98,7 +105,7 @@ func myStreamHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err.Error())
 	 	os.Exit(1)
 	} 
-	request.Header.Set("Client-ID", "clientID")
+	request.Header.Set("Client-ID", clientID)
 	request.Header.Set("Accept", "application/vnd.twitchtv.v5+json")
 
 	resp, err := client.Do(request)
@@ -111,18 +118,18 @@ func myStreamHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-type GetUsersAPIResposne struct {
-	TotalUsers int64 'json:"_total"'
-	UserList []Users 'json:"users"'
+type GetUsersAPIResponse struct {
+	TotalUsers int `json:"_total"`
+	UserList []Users `json:"users"`
 }
 
 type Users struct {
-	Id int64 'json:"_id"'
-	DisplayName string 'json:"display_name"'
-	Name string 'json:"name"'
-	Type string 'json:"type"'
-	Bio string 'json:"bio"'
-	CreatedDate string 'json:"created_at"'
-	LastUpdated string 'json:"updated_at"'
-	Logo string 'json:"logo"'
+	Id string `json:"_id"`
+	DisplayName string `json:"display_name"`
+	Name string `json:"name"`
+	Type string `json:"type"`
+	Bio string `json:"bio"`
+	CreatedDate string `json:"created_at"`
+	LastUpdated string `json:"updated_at"`
+	Logo string `json:"logo"`
 }
