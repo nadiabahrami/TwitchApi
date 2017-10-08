@@ -2,9 +2,8 @@ package main
 
 import (
 	"fmt"
-	"./twitch"
 	"net/http"
-	// "path"
+	"path"
 	"io/ioutil"
 	"os"
 	"encoding/json"
@@ -16,7 +15,7 @@ func main() {
 	fmt.Println("Booting the server...")
 
 	// Configure a sample route
-	http.HandleFunc("/users", myTwitchHandler)
+	http.HandleFunc("/", myTwitchHandler)
 
 	// Run your server
 	http.ListenAndServe(":8080", nil)
@@ -25,9 +24,8 @@ func main() {
 func myTwitchHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Recieved the following request:", r.Body)
 	clientID := os.Getenv("CLIENT_ID")
-	twitch.DoSomething()
-	fmt.Println(r.URL)
-	// fmt.Println(path.Base(r))
+	// twitch.DoSomething()
+	username := path.Base(r.URL.String())
 
 	// YOUR ROUTES LOGIC GOES HERE
 	//
@@ -37,7 +35,7 @@ func myTwitchHandler(w http.ResponseWriter, r *http.Request) {
 
 	// resp, err := client.Get("https://api.twitch.tv/kraken/users?login=dallas,dallasnchains")
 	
-	request, err := http.NewRequest("GET", "https://api.twitch.tv/kraken/users?login=dallas", nil)
+	request, err := http.NewRequest("GET", "https://api.twitch.tv/kraken/users?login=" + username, nil)
 	if err != nil {
 		fmt.Println(err.Error())
 	 	os.Exit(1)
@@ -95,7 +93,6 @@ func myTwitchHandler(w http.ResponseWriter, r *http.Request) {
     if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(responseData3)
 	fmt.Fprintf(w, "Stream Status")
     fmt.Fprintf(w, string(responseData3))
 }
