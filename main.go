@@ -10,6 +10,8 @@ import (
 )
 
 func main() {
+	clientID := os.Getenv("CLIENT_ID")
+	fmt.Println(clientID)
 	fmt.Println("Booting the server...")
 
 	// Configure a sample route
@@ -40,7 +42,7 @@ func myTwitchHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err.Error())
 	 	os.Exit(1)
 	} 
-	request.Header.Set("Client-ID", "ow8er2yjqzvbwzvfx832rrb5ucy933")
+	request.Header.Set("Client-ID", "clientID")
 	request.Header.Set("Accept", "application/vnd.twitchtv.v5+json")
 
 	resp, err := client.Do(request)
@@ -69,7 +71,7 @@ func myChannelHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err.Error())
 	 	os.Exit(1)
 	} 
-	request.Header.Set("Client-ID", "ow8er2yjqzvbwzvfx832rrb5ucy933")
+	request.Header.Set("Client-ID", "clientID")
 	request.Header.Set("Accept", "application/vnd.twitchtv.v5+json")
 
 	resp, err := client.Do(request)
@@ -98,7 +100,7 @@ func myStreamHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err.Error())
 	 	os.Exit(1)
 	} 
-	request.Header.Set("Client-ID", "ow8er2yjqzvbwzvfx832rrb5ucy933")
+	request.Header.Set("Client-ID", "clientID")
 	request.Header.Set("Accept", "application/vnd.twitchtv.v5+json")
 
 	resp, err := client.Do(request)
