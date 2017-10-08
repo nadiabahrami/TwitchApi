@@ -58,8 +58,27 @@ func myTwitchHandler(w http.ResponseWriter, r *http.Request) {
 
     fmt.Println(responseObject.TotalUsers)
   	fmt.Println(responseObject.UserList[0].Id)
+  	user_id := responseObject.UserList[0].Id
 
+  	fmt.Println("Making Second Request")
+  	request, err = http.NewRequest("GET", "https://api.twitch.tv/kraken/channels/" + user_id, nil)
+	if err != nil {
+		fmt.Println(err.Error())
+	 	os.Exit(1)
+	} 
+	request.Header.Set("Client-ID", clientID)
+	request.Header.Set("Accept", "application/vnd.twitchtv.v5+json")
+
+	client = &http.Client{}
+	resp, err = client.Do(request)
+        
+    responseData2, err := ioutil.ReadAll(resp.Body)
+    if err != nil {
+		log.Fatal(err)
+	}
+    fmt.Fprintf(w, string(responseData2))
 }
+
 
 func myChannelHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Recieved the following request:", r.Body)
