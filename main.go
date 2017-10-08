@@ -110,3 +110,19 @@ func myStreamHandler(w http.ResponseWriter, r *http.Request) {
     fmt.Fprintf(w, string(responseData))
 
 }
+
+type GetUsersAPIResposne struct {
+	TotalUsers int64 'json:"_total"'
+	UserList []Users 'json:"users"'
+}
+
+type Users struct {
+	Id int64 'json:"_id"'
+	DisplayName string 'json:"display_name"'
+	Name string 'json:"name"'
+	Type string 'json:"type"'
+	Bio string 'json:"bio"'
+	CreatedDate string 'json:"created_at"'
+	LastUpdated string 'json:"updated_at"'
+	Logo string 'json:"logo"'
+}
