@@ -11,7 +11,6 @@ import (
 
 func main() {
 	clientID := os.Getenv("CLIENT_ID")
-	fmt.Println(clientID)
 	fmt.Println("Booting the server...")
 
 	// Configure a sample route
@@ -51,7 +50,7 @@ func myTwitchHandler(w http.ResponseWriter, r *http.Request) {
     if err != nil {
 		log.Fatal(err)
 	}
-    fmt.Println(string(responseData))
+    fmt.Fprintf(w, string(responseData))
 
 }
 
@@ -80,8 +79,7 @@ func myChannelHandler(w http.ResponseWriter, r *http.Request) {
     if err != nil {
 		log.Fatal(err)
 	}
-    fmt.Println(string(responseData))
-
+    fmt.Fprintf(w, string(responseData))
 }
 
 func myStreamHandler(w http.ResponseWriter, r *http.Request) {
@@ -109,6 +107,6 @@ func myStreamHandler(w http.ResponseWriter, r *http.Request) {
     if err != nil {
 		log.Fatal(err)
 	}
-    fmt.Println(string(responseData))
+    fmt.Fprintf(w, string(responseData))
 
 }
