@@ -10,6 +10,17 @@ import (
 	"log"
 )
 
+type APIreturn struct {
+	Bio string
+	AccountCreateDate string
+	DisplayName string
+	CurrentlyStreaming bool
+	Language string
+	Game string
+	NumberOfFollowers int
+	NumberOfViews int
+}
+
 func main() {
 	// clientID := os.Getenv("CLIENT_ID")
 	fmt.Println("Booting the server...")
@@ -49,13 +60,10 @@ func myTwitchHandler(w http.ResponseWriter, r *http.Request) {
     if err != nil {
 		log.Fatal(err)
 	}
-    fmt.Fprintf(w, string(responseData))
     
     var responseObject GetUsersAPIResponse
 	json.Unmarshal(responseData, &responseObject)
 
-    fmt.Println(responseObject.TotalUsers)
-  	fmt.Println(responseObject.UserList[0].Id)
   	user_id := responseObject.UserList[0].Id
 
   	fmt.Println("Making Second Request")
@@ -74,7 +82,9 @@ func myTwitchHandler(w http.ResponseWriter, r *http.Request) {
     if err != nil {
 		log.Fatal(err)
 	}
-    fmt.Fprintf(w, string(responseData2))
+
+    var responseObject2 GetChannel
+	json.Unmarshal(responseData2, &responseObject2)
 
     fmt.Println("Making Third Request")
     
@@ -97,20 +107,14 @@ func myTwitchHandler(w http.ResponseWriter, r *http.Request) {
     var responseObject3 GetStatus
 	json.Unmarshal(responseData3, &responseObject3)
 
-	fmt.Println(responseObject3.Stream)
-	fmt.Printf("%+v\n", responseObject3)
-	fmt.Println("***********************")
 	if responseObject3.Stream != nil {
 		responseObject3.Status = true
 	} else {
 		responseObject3.Status = false
 	}
-	fmt.Fprintf(w, "\n")
-	fmt.Fprintf(w, "Stream Status:")
-	fmt.Fprintf(w, "\n")
-	fmt.Println(responseObject3.Status)
 
-	data, err := json.Marshal(responseObject3)
+	write := APIreturn{responseObject.UserList[0].Bio, responseObject.UserList[0].CreatedDate, responseObject.UserList[0].DisplayName, responseObject3.Status, responseObject2.Language, responseObject2.Game, responseObject2.Followers, responseObject2.Views}
+	data, err := json.Marshal(write)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -125,6 +129,13 @@ type GetStatus struct {
 type GetUsersAPIResponse struct {
 	TotalUsers int `json:"_total"`
 	UserList []Users `json:"users"`
+}
+
+type GetChannel struct {
+	Game string `json:"game"`
+	Language string `json:"language"`
+	Views int `json:"views"`
+	Followers int `json:"followers"`
 }
 
 type Users struct {
