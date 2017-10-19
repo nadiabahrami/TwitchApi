@@ -95,6 +95,29 @@ func myTwitchHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Fprintf(w, "Stream Status")
     fmt.Fprintf(w, string(responseData3))
+
+    var responseObject3 GetStatus
+	json.Unmarshal(responseData3, &responseObject3)
+
+	fmt.Println(responseObject3.Stream)
+	fmt.Printf("%+v\n", responseObject3)
+	fmt.Println("***********************")
+	if responseObject3.Stream != nil {
+		responseObject3.Status = true
+	} else {
+		responseObject3.Status = false
+	}
+
+	fmt.Println(responseObject3.Status)
+}
+
+type Stream struct {
+		Game string `json:"game"`
+}
+
+type GetStatus struct {
+	Stream *map[string]interface{} `json:"stream"`
+	Status bool
 }
 
 type GetUsersAPIResponse struct {
