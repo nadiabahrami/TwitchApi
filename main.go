@@ -93,8 +93,6 @@ func myTwitchHandler(w http.ResponseWriter, r *http.Request) {
     if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Fprintf(w, "Stream Status")
-    fmt.Fprintf(w, string(responseData3))
 
     var responseObject3 GetStatus
 	json.Unmarshal(responseData3, &responseObject3)
@@ -107,12 +105,16 @@ func myTwitchHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		responseObject3.Status = false
 	}
-
+	fmt.Fprintf(w, "\n")
+	fmt.Fprintf(w, "Stream Status:")
+	fmt.Fprintf(w, "\n")
 	fmt.Println(responseObject3.Status)
-}
 
-type Stream struct {
-		Game string `json:"game"`
+	data, err := json.Marshal(responseObject3)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Fprintf(w, string(data))
 }
 
 type GetStatus struct {
