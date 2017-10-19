@@ -26,6 +26,6 @@
 ```http://0.0.0.0:8080/dallas```
 
 ### Response
-```
+```json
 {"Bio":"Friendly, interactive, and very bald. I work as a software engineer at Twitch. I stream regularly and play mostly new releases or something from my backlog.","AccountCreateDate":"2013-06-03T19:12:02.580593Z","DisplayName":"dallas","CurrentlyStreaming":false,"Language":"en","Game":"Cuphead","NumberOfFollowers":118,"NumberOfViews":6866}
 ```
